@@ -1,6 +1,7 @@
 package imageCache;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.annotation.Nullable;
 
 import java.util.HashMap;
@@ -106,11 +107,17 @@ final class ImageCacheModel {
     }
 
     /**
-     * @param value : bitmap that you want to insert into cache.
+     * @param bitmap : bitmap that you want to insert into cache.
      * @return size of bitmap.
      */
-    private long sizeOf(Bitmap value) {
-        return value.getByteCount() / 1024;
+    private long sizeOf(Bitmap bitmap) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+            return bitmap.getByteCount() / 1024;
+        }
+
+        // Pre HC-MR1
+        return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
     }
 
     //endregion
